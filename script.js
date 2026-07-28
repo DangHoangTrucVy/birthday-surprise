@@ -1,428 +1,113 @@
-// ========================================
-// PERSONAL INFORMATION
-// ========================================
+/* =========================================
+   PARTICLES
+========================================= */
 
-// Đổi tên người bạn ở đây
-const friendName = "Susan Jane";
-
-
-// ========================================
-// ELEMENTS
-// ========================================
-
-const fingerprintButton =
+const particleContainer =
     document.getElementById(
-        "fingerprintButton"
+        "particles"
     );
 
-const unlockStatus =
-    document.getElementById(
-        "unlockStatus"
+
+function createParticle() {
+
+    const particle =
+        document.createElement(
+            "div"
+        );
+
+    particle.className =
+        "particle";
+
+
+    const size =
+        Math.random() * 5 + 2;
+
+
+    particle.style.width =
+        `${size}px`;
+
+
+    particle.style.height =
+        `${size}px`;
+
+
+    particle.style.left =
+        `${Math.random() * 100}%`;
+
+
+    particle.style.animationDuration =
+        `${Math.random() * 10 + 8}s`;
+
+
+    particle.style.animationDelay =
+        `${Math.random() * 5}s`;
+
+
+    particleContainer.appendChild(
+        particle
     );
 
-const progressContainer =
-    document.getElementById(
-        "progressContainer"
-    );
+}
 
-const progressBar =
-    document.getElementById(
-        "progressBar"
-    );
 
-const unlockScreen =
-    document.getElementById(
-        "unlockScreen"
-    );
+for (
+    let i = 0;
+    i < 45;
+    i++
+) {
 
-const successScreen =
-    document.getElementById(
-        "successScreen"
-    );
+    createParticle();
 
-const birthdayScreen =
-    document.getElementById(
-        "birthdayScreen"
-    );
+}
 
-const friendNameElement =
-    document.getElementById(
-        "friendName"
-    );
+
+/* =========================================
+   WISH MODAL
+========================================= */
 
 const wishButton =
     document.getElementById(
         "wishButton"
     );
 
-const wishPopup =
+
+const wishOverlay =
     document.getElementById(
-        "wishPopup"
+        "wishOverlay"
     );
 
-const closePopup =
+
+const closeButton =
     document.getElementById(
-        "closePopup"
+        "closeButton"
     );
+
 
 const celebrateButton =
     document.getElementById(
         "celebrateButton"
     );
 
-const effectContainer =
+
+const celebration =
     document.getElementById(
-        "effectContainer"
+        "celebration"
     );
 
 
-// ========================================
-// SET FRIEND NAME
-// ========================================
-
-friendNameElement.textContent =
-    friendName;
-
-
-// ========================================
-// FINGERPRINT UNLOCK
-// ========================================
-
-let holdTimer = null;
-
-let progressTimer = null;
-
-let progress = 0;
-
-let isHolding = false;
-
-let unlocked = false;
-
-
-// ========================================
-// START HOLD
-// ========================================
-
-function startHold(event) {
-
-    if (unlocked) return;
-
-    event.preventDefault();
-
-    if (isHolding) return;
-
-    isHolding = true;
-
-    fingerprintButton.classList.add(
-        "holding"
-    );
-
-    progressContainer.classList.add(
-        "active"
-    );
-
-    unlockStatus.textContent =
-        "Unlocking...";
-
-    progress = 0;
-
-
-    progressTimer = setInterval(
-        () => {
-
-            progress += 2;
-
-            progressBar.style.width =
-                progress + "%";
-
-
-            if (progress >= 100) {
-
-                clearInterval(
-                    progressTimer
-                );
-
-                unlockSuccess();
-
-            }
-
-        },
-        40
-    );
-
-}
-
-
-// ========================================
-// CANCEL HOLD
-// ========================================
-
-function cancelHold() {
-
-    if (unlocked) return;
-
-    isHolding = false;
-
-    clearInterval(
-        progressTimer
-    );
-
-    fingerprintButton.classList.remove(
-        "holding"
-    );
-
-    progress = 0;
-
-    progressBar.style.width =
-        "0%";
-
-    progressContainer.classList.remove(
-        "active"
-    );
-
-    unlockStatus.textContent =
-        "Touch & Hold";
-
-}
-
-
-// ========================================
-// UNLOCK SUCCESS
-// ========================================
-
-function unlockSuccess() {
-
-    if (unlocked) return;
-
-    unlocked = true;
-
-    fingerprintButton.classList.remove(
-        "holding"
-    );
-
-    progressBar.style.width =
-        "100%";
-
-    unlockStatus.textContent =
-        "ACCESS GRANTED ❤️";
-
-
-    // Create transition particles
-
-    createUnlockParticles();
-
-
-    // Fade out unlock screen
-
-    setTimeout(
-        () => {
-
-            unlockScreen.classList.remove(
-                "active"
-            );
-
-            successScreen.classList.add(
-                "active"
-            );
-
-        },
-        600
+const backButton =
+    document.getElementById(
+        "backButton"
     );
 
 
-    // Go to birthday
-
-    setTimeout(
-        () => {
-
-            successScreen.classList.remove(
-                "active"
-            );
-
-            birthdayScreen.classList.add(
-                "active"
-            );
-
-            createConfetti(60);
-
-        },
-        3000
-    );
-
-}
-
-
-// ========================================
-// MOUSE EVENTS
-// ========================================
-
-fingerprintButton.addEventListener(
-    "mousedown",
-    startHold
-);
-
-fingerprintButton.addEventListener(
-    "mouseup",
-    cancelHold
-);
-
-fingerprintButton.addEventListener(
-    "mouseleave",
-    cancelHold
-);
-
-
-// ========================================
-// TOUCH EVENTS
-// ========================================
-
-fingerprintButton.addEventListener(
-    "touchstart",
-    startHold,
-    {
-        passive: false
-    }
-);
-
-fingerprintButton.addEventListener(
-    "touchend",
-    cancelHold
-);
-
-fingerprintButton.addEventListener(
-    "touchcancel",
-    cancelHold
-);
-
-
-// ========================================
-// UNLOCK PARTICLES
-// ========================================
-
-function createUnlockParticles() {
-
-    for (
-        let i = 0;
-        i < 40;
-        i++
-    ) {
-
-        const particle =
-            document.createElement(
-                "div"
-            );
-
-        particle.className =
-            "unlock-particle";
-
-        particle.style.position =
-            "fixed";
-
-        particle.style.width =
-            "6px";
-
-        particle.style.height =
-            "6px";
-
-        particle.style.borderRadius =
-            "50%";
-
-        particle.style.background =
-            getRandomColor();
-
-        particle.style.left =
-            "50%";
-
-        particle.style.top =
-            "50%";
-
-        particle.style.zIndex =
-            "500";
-
-        const angle =
-            Math.random()
-            * Math.PI
-            * 2;
-
-        const distance =
-            100
-            +
-            Math.random()
-            * 300;
-
-        const x =
-            Math.cos(angle)
-            * distance;
-
-        const y =
-            Math.sin(angle)
-            * distance;
-
-
-        particle.animate(
-
-            [
-
-                {
-                    transform:
-                        "translate(-50%, -50%)",
-                    opacity:
-                        1
-                },
-
-                {
-                    transform:
-                        `translate(
-                            calc(-50% + ${x}px),
-                            calc(-50% + ${y}px)
-                        )`,
-                    opacity:
-                        0
-                }
-
-            ],
-
-            {
-
-                duration:
-                    1200,
-
-                easing:
-                    "ease-out"
-
-            }
-
-        );
-
-
-        effectContainer.appendChild(
-            particle
-        );
-
-
-        setTimeout(
-            () => {
-
-                particle.remove();
-
-            },
-            1300
-        );
-
-    }
-
-}
-
-
-// ========================================
-// OPEN WISH POPUP
-// ========================================
+/* OPEN MODAL */
 
 wishButton.addEventListener(
     "click",
     () => {
 
-        wishPopup.classList.add(
+        wishOverlay.classList.add(
             "active"
         );
 
@@ -430,15 +115,13 @@ wishButton.addEventListener(
 );
 
 
-// ========================================
-// CLOSE POPUP
-// ========================================
+/* CLOSE MODAL */
 
-closePopup.addEventListener(
+closeButton.addEventListener(
     "click",
     () => {
 
-        wishPopup.classList.remove(
+        wishOverlay.classList.remove(
             "active"
         );
 
@@ -446,19 +129,18 @@ closePopup.addEventListener(
 );
 
 
-// ========================================
-// CLICK OUTSIDE
-// ========================================
+/* CLICK OUTSIDE */
 
-wishPopup.addEventListener(
+wishOverlay.addEventListener(
     "click",
     (event) => {
 
         if (
-            event.target === wishPopup
+            event.target ===
+            wishOverlay
         ) {
 
-            wishPopup.classList.remove(
+            wishOverlay.classList.remove(
                 "active"
             );
 
@@ -468,115 +150,73 @@ wishPopup.addEventListener(
 );
 
 
-// ========================================
-// CELEBRATE
-// ========================================
+/* =========================================
+   CELEBRATE
+========================================= */
 
 celebrateButton.addEventListener(
     "click",
     () => {
 
-        wishPopup.classList.remove(
+        wishOverlay.classList.remove(
             "active"
         );
 
-        createConfetti(
-            200
-        );
 
-        createHeartExplosion();
+        setTimeout(
+            () => {
+
+                celebration.classList.add(
+                    "active"
+                );
+
+
+                createCelebrationParticles();
+
+            },
+            400
+        );
 
     }
 );
 
 
-// ========================================
-// CONFETTI
-// ========================================
+/* =========================================
+   CELEBRATION PARTICLES
+========================================= */
 
-function createConfetti(
-    amount
-) {
-
-    const colors = [
-
-        "#c94f6d",
-
-        "#ee9eae",
-
-        "#f8dce2",
-
-        "#ffffff",
-
-        "#8f3048"
-
-    ];
-
+function createCelebrationParticles() {
 
     for (
         let i = 0;
-        i < amount;
+        i < 60;
         i++
     ) {
 
-        const confetti =
+        const particle =
             document.createElement(
                 "div"
             );
 
-        confetti.className =
-            "confetti";
+
+        particle.className =
+            "particle";
 
 
-        confetti.style.left =
-            Math.random()
-            * 100
-            + "%";
+        particle.style.left =
+            `${Math.random() * 100}%`;
 
 
-        confetti.style.top =
-            "-20px";
+        particle.style.animationDuration =
+            `${Math.random() * 4 + 3}s`;
 
 
-        confetti.style.background =
-            colors[
-                Math.floor(
-                    Math.random()
-                    * colors.length
-                )
-            ];
+        particle.style.animationDelay =
+            `${Math.random() * 2}s`;
 
 
-        confetti.style.animationDuration =
-
-            2
-            +
-            Math.random()
-            * 3
-            +
-            "s";
-
-
-        confetti.style.animationDelay =
-
-            Math.random()
-            * 0.5
-            +
-            "s";
-
-
-        effectContainer.appendChild(
-            confetti
-        );
-
-
-        setTimeout(
-            () => {
-
-                confetti.remove();
-
-            },
-            5000
+        particleContainer.appendChild(
+            particle
         );
 
     }
@@ -584,159 +224,89 @@ function createConfetti(
 }
 
 
-// ========================================
-// HEART EXPLOSION
-// ========================================
+/* =========================================
+   BACK
+========================================= */
 
-function createHeartExplosion() {
+backButton.addEventListener(
+    "click",
+    () => {
 
-    for (
-        let i = 0;
-        i < 40;
-        i++
-    ) {
+        celebration.classList.remove(
+            "active"
+        );
 
-        const heart =
-            document.createElement(
-                "div"
-            );
-
-        heart.innerHTML =
-            "♡";
+    }
+);
 
 
-        heart.style.position =
-            "fixed";
+/* =========================================
+   PHOTO PARALLAX
+========================================= */
 
-        heart.style.left =
-            "50%";
-
-        heart.style.top =
-            "50%";
-
-        heart.style.color =
-            getRandomColor();
-
-        heart.style.fontSize =
-            15
-            +
-            Math.random()
-            * 20
-            +
-            "px";
-
-        heart.style.zIndex =
-            "500";
+const photos =
+    document.querySelectorAll(
+        ".memory-photo"
+    );
 
 
-        const angle =
-            Math.random()
-            * Math.PI
-            * 2;
+document.addEventListener(
+    "mousemove",
+    (event) => {
 
-        const distance =
-            100
-            +
-            Math.random()
-            * 250;
-
-        const x =
-            Math.cos(angle)
-            * distance;
-
-        const y =
-            Math.sin(angle)
-            * distance;
+        const mouseX =
+            (
+                event.clientX /
+                window.innerWidth
+            ) - 0.5;
 
 
-        heart.animate(
+        const mouseY =
+            (
+                event.clientY /
+                window.innerHeight
+            ) - 0.5;
 
-            [
 
-                {
+        photos.forEach(
+            (
+                photo,
+                index
+            ) => {
 
-                    transform:
-                        "translate(-50%, -50%) scale(0)",
+                const movement =
+                    8 +
+                    (
+                        index % 3
+                    ) * 5;
 
-                    opacity:
-                        1
 
-                },
+                photo.style.marginLeft =
+                    `${mouseX * movement}px`;
 
-                {
 
-                    transform:
-                        `translate(
-                            calc(-50% + ${x}px),
-                            calc(-50% + ${y}px)
-                        )
-                        scale(1.5)`,
-
-                    opacity:
-                        0
-
-                }
-
-            ],
-
-            {
-
-                duration:
-                    1500,
-
-                easing:
-                    "ease-out"
+                photo.style.marginTop =
+                    `${mouseY * movement}px`;
 
             }
-
-        );
-
-
-        effectContainer.appendChild(
-            heart
-        );
-
-
-        setTimeout(
-            () => {
-
-                heart.remove();
-
-            },
-            1600
         );
 
     }
-
-}
-
-
-// ========================================
-// RANDOM COLORS
-// ========================================
-
-function getRandomColor() {
-
-    const colors = [
-
-        "#c94f6d",
-
-        "#ee9eae",
-
-        "#f8dce2",
-
-        "#ffffff",
-
-        "#8f3048"
-
-    ];
+);
 
 
-    return colors[
-        Math.floor(
-            Math.random()
-            * colors.length
-        )
-    ];
+/* =========================================
+   RANDOM PHOTO FLOAT DELAYS
+========================================= */
 
-}
+photos.forEach(
+    (
+        photo,
+        index
+    ) => {
+
+        photo.style.animationDelay =
+            `${index * 0.25}s`;
+
+    }
+);

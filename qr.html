@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Birthday QR Code</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet"
+    >
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-family: "DM Sans", sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    #ffffff,
+                    #fff0f4,
+                    #f7d8e2
+                );
+
+        }
+
+        .qr-card {
+
+            width: min(500px, 90vw);
+
+            padding: 50px;
+
+            text-align: center;
+
+            background:
+                rgba(255,255,255,0.9);
+
+            border-radius: 35px;
+
+            box-shadow:
+                0 25px 70px
+                rgba(150, 40, 80, 0.18);
+
+        }
+
+        .qr-card h1 {
+
+            color: #8f2948;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size: 42px;
+
+            font-style: italic;
+
+            margin-bottom: 12px;
+
+        }
+
+        .qr-card p {
+
+            color: #bd607b;
+
+            line-height: 1.7;
+
+            margin-bottom: 25px;
+
+        }
+
+        #qrcode {
+
+            display: flex;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            margin: auto;
+
+            width: fit-content;
+
+            background: white;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(150, 40, 80, 0.1);
+
+        }
+
+        .url-input {
+
+            width: 100%;
+
+            margin-top: 25px;
+
+            padding: 14px 18px;
+
+            border: 1px solid #e8a5b8;
+
+            border-radius: 30px;
+
+            outline: none;
+
+            text-align: center;
+
+            color: #8f2948;
+
+            font-size: 14px;
+
+        }
+
+        .generate-button {
+
+            margin-top: 15px;
+
+            padding: 14px 30px;
+
+            border: none;
+
+            border-radius: 30px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #d94f72,
+                    #ea809d
+                );
+
+            color: white;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="qr-card">
+
+        <h1>
+            A Special Birthday
+        </h1>
+
+        <p>
+            Scan this QR Code and discover
+            a little birthday surprise ♡
+        </p>
+
+
+        <div id="qrcode"></div>
+
+
+        <input
+            class="url-input"
+            id="websiteUrl"
+            type="text"
+            placeholder="Paste your Vercel URL here"
+            value="https://your-project.vercel.app"
+        >
+
+
+        <button
+            class="generate-button"
+            onclick="generateQR()"
+        >
+            Generate QR Code ✨
+        </button>
+
+    </div>
+
+
+    <script>
+
+        let qrCode;
+
+        function generateQR() {
+
+            const url =
+                document
+                    .getElementById(
+                        "websiteUrl"
+                    )
+                    .value
+                    .trim();
+
+
+            if (!url) {
+
+                alert(
+                    "Please enter your website URL!"
+                );
+
+                return;
+
+            }
+
+
+            document
+                .getElementById(
+                    "qrcode"
+                )
+                .innerHTML = "";
+
+
+            qrCode =
+                new QRCode(
+
+                    document.getElementById(
+                        "qrcode"
+                    ),
+
+                    {
+
+                        text: url,
+
+                        width: 220,
+
+                        height: 220,
+
+                        colorDark:
+                            "#8f2948",
+
+                        colorLight:
+                            "#ffffff",
+
+                        correctLevel:
+                            QRCode.CorrectLevel.H
+
+                    }
+
+                );
+
+        }
+
+
+        generateQR();
+
+    </script>
+
+
+</body>
+
+</html>
